@@ -1,0 +1,69 @@
+<div class="profile-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="user-box">
+      <img [src]="avatarUrl()" class="avatar" />
+      <h2>{{ user()?.name }}</h2>
+      <span class="level">Level {{ level() }}</span>
+      <span class="xp">{{ xp() }} XP</span>
+    </div>
+
+    <nav class="nav">
+      <a routerLink="/my-orders">📦 My Orders</a>
+      <a routerLink="/wishlist">❤️ Wishlist</a>
+      <a routerLink="/addresses">🏠 Address Book</a>
+      <a routerLink="/change-password">🔒 Change Password</a>
+    </nav>
+
+    <button class="logout" (click)="logout()">Logout</button>
+  </aside>
+
+  <!-- CONTENT -->
+  <section class="content">
+
+    <!-- TOP STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <h4>Total Orders</h4>
+        <p>{{ orders.orders()?.length || 0 }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h4>Wishlist Items</h4>
+        <p>3</p>
+      </div>
+
+      <div class="stat-card">
+        <h4>XP Progress</h4>
+        <p>{{ xp() }}</p>
+      </div>
+    </div>
+
+    <!-- DELIVERY STATUS -->
+    <div class="card">
+      <h3>Current Delivery Status</h3>
+      <div class="progress-bar">
+        <div class="progress" style="width: 65%"></div>
+      </div>
+      <small>Order is on the way 🚚</small>
+    </div>
+
+    <!-- RECENT ORDERS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Recent Orders</h3>
+        <a routerLink="/my-orders">View all</a>
+      </div>
+
+      <div class="order" *ngFor="let o of orders.orders() | slice:0:3">
+        <div>
+          <strong>#{{ o.id }}</strong>
+          <span class="status">{{ o.status }}</span>
+        </div>
+        <button routerLink="/my-orders">View</button>
+      </div>
+    </div>
+
+  </section>
+</div>

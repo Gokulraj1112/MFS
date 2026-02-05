@@ -1,0 +1,102 @@
+<div class="container my-5">
+
+  <div class="text-center mb-5">
+    <h2 class="fw-bold gradient-title">🌸 My Orders</h2>
+    <p class="text-muted">Track your BloomVerse flower deliveries</p>
+  </div>
+
+  @if (ordersService.isLoading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+  }
+  @else if (ordersService.error()) {
+    <div class="alert alert-danger text-center">
+      {{ ordersService.error() }}
+      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadOrders()">Retry</button>
+    </div>
+  }
+  @else if (ordersService.orders().length === 0) {
+    <div class="text-center">
+      <p>No orders yet 🌱</p>
+      <a routerLink="/shop" class="btn btn-primary">Start Shopping</a>
+    </div>
+  }
+  @else {
+
+    @for (order of ordersService.orders(); track order.id) {
+
+      <div class="order-card mb-4">
+
+        <!-- LEFT IMAGE -->
+        <div class="order-image">
+          <img [src]="adminApi + '/uploads/' + order.items[0].image">
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div class="order-content">
+
+          <!-- Header -->
+          <div class="order-header">
+            <div>
+              <h6 class="fw-bold mb-0">Order #{{ order.id }}</h6>
+              <small class="text-muted">{{ formatDate(order.created_at) }}</small>
+            </div>
+
+            <span class="status-badge" [ngClass]="order.status.toLowerCase()">
+              {{ order.status }}
+            </span>
+          </div>
+
+          <!-- Progress -->
+          <div class="progress-track">
+            <div class="step" [class.active]="true">Ordered</div>
+            <div class="step" [class.active]="order.status !== 'NEW'">Packed</div>
+            <div class="step" [class.active]="order.status === 'DELIVERED'">Delivered</div>
+          </div>
+
+          <!-- Address -->
+          <div class="address-box">
+            <strong>{{ order.customer_name }}</strong><br>
+            {{ order.phone }}<br>
+            {{ order.address }}, {{ order.city }} - {{ order.pincode }}
+          </div>
+
+          <!-- Items -->
+          <div class="items-list">
+            @for (item of order.items; track item.product_name) {
+              <div class="item-row">
+                <span>{{ item.product_name }} × {{ item.quantity }}</span>
+              <!--   <span>₹{{ (item.price * item.quantity).toFixed(0) }}</span>-->
+              </div>
+            }
+          </div>
+
+          <!-- Footer -->
+          <div class="order-footer">
+            <div class="total">
+              Total ₹{{ order.total.toFixed(0) }}
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-outline-primary btn-sm" (click)="reorder(order)">
+                🔁 Re-order
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="downloadInvoice(order)">
+                📄 Invoice
+              </button>
+              <button 
+                class="btn btn-outline-danger btn-sm"
+                *ngIf="order.status !== 'DELIVERED'"
+                (click)="cancelOrder(order.id)">
+                ❌ Cancel Order
+              </button>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    }
+  }
+</div>
