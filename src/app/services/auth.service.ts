@@ -11,7 +11,7 @@ export class AuthService {
 
   private readonly TOKEN_KEY = 'bloomverse_token';
   private readonly USER_KEY = 'bloomverse_user';
-  private readonly baseUrl = 'http://localhost:3000/api/auth/user';
+  private readonly baseUrl = 'https://mfs-backend.netlify.app/';
 
   private userSignal = signal<User | null>(this.getUserFromStorage());
   private isLoadingSignal = signal<boolean>(false);

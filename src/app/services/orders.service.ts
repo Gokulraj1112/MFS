@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 })
 export class OrdersService {
 
-  private readonly baseUrl = 'http://localhost:3000/api/orders';
+  private readonly baseUrl = 'https://mfs-backend.netlify.app/';
 
   private ordersSignal = signal<Order[]>([]);
   private isLoadingSignal = signal(false);
@@ -99,7 +99,7 @@ export class OrdersService {
   // ===============================
   uploadTempPaymentProof(data: FormData) {
   return this.http.post(
-    'http://localhost:3000/api/payments/upload-temp-proof',
+    'https://mfs-backend.netlify.app/',
     data,
     { headers: this.getAuthOnlyHeaders() }
   );
